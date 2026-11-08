@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101b3e">
+  <title>Studycade — make studying your high score</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="scanlines" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Studycade home">
+      <span class="brand-mark" aria-hidden="true">✦</span>
+      <span>STUDY<span>CADE</span></span>
+    </a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a class="nav-link active" href="#dashboard">Dashboard</a>
+      <a class="nav-link" href="#sets">Question sets</a>
+      <a class="nav-link" href="#games">Arcade</a>
+    </nav>
+    <div class="header-status"><span class="status-dot"></span> SYSTEM ONLINE</div>
+    <button class="code-button" data-action="open-code">ENTER CODE</button>
+  </header>
+
+  <main id="top">
+    <section class="hero wrap" id="dashboard">
+      <div class="hero-copy">
+        <p class="eyebrow">PLAYER 01 <span>•</span> STUDY MODE: ON</p>
+        <h1>Make studying<br><em>your high score.</em></h1>
+        <p class="hero-text">Turn your notes into a playable arcade. Every question is a power-up, every correct answer keeps the ball alive.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" data-action="start-game"><span class="btn-icon">▶</span> Play now</button>
+          <button class="btn btn-ghost" data-action="open-daily"><span class="btn-icon">✦</span> Daily challenge</button>
+          <button class="btn btn-ghost" data-action="new-set"><span class="btn-icon">＋</span> New question set</button>
+        </div>
+        <div class="key-hint"><kbd>←</kbd><kbd>→</kbd> move paddle <span class="key-divider"></span> <kbd>↑</kbd> or <kbd>SPACE</kbd> launch</div>
+      </div>
+      <div class="hero-machine" aria-hidden="true">
+        <div class="machine-top"><span>HIGH SCORE</span><strong>042,800</strong><span>1UP&nbsp; 009,500</span></div>
+        <div class="mini-screen">
+          <div class="mini-bricks"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="mini-ball"></div>
+          <div class="mini-paddle"></div>
+          <span class="mini-level">LEVEL 03</span>
+        </div>
+        <div class="machine-controls"><span class="joystick"><i></i></span><span class="machine-label">BREAK • LEARN • REPEAT</span><span class="machine-lights"><i></i><i></i><i></i></span></div>
+      </div>
+    </section>
+
+    <section class="stats-row wrap" aria-label="Player stats">
+      <article class="stat-card"><span class="stat-icon coin">◆</span><div><span class="stat-label">TOTAL POINTS</span><strong id="total-points">0</strong></div><span class="stat-trend">ALL RUNS</span></article>
+      <article class="stat-card"><span class="stat-icon flame">♨</span><div><span class="stat-label">STUDY STREAK</span><strong id="study-streak">0 DAYS</strong></div><span class="stat-trend" id="study-best">BEST: 0</span></article>
+      <article class="stat-card"><span class="stat-icon bolt">ϟ</span><div><span class="stat-label">QUESTIONS CLEARED</span><strong id="questions-cleared">0</strong></div><span class="stat-trend">ALL TIME</span></article>
+      <article class="stat-card"><span class="stat-icon flame">✓</span><div><span class="stat-label">TASKS FINISHED</span><strong id="tasks-finished">0</strong></div><span class="stat-trend">ALL TIME</span></article>
+      <article class="stat-card coin-wallet"><span class="stat-icon coin">◇</span><div><span class="stat-label">COINS</span><strong id="coin-count">0</strong></div><button class="reset-coins-button coin-reset-button" data-action="reset-coins">RESET COINS</button></article>
+    </section>
+
+    <div class="shop-actions wrap"><div class="shop-action-buttons"><button class="btn btn-primary" data-action="open-shop">OPEN SHOP</button><button class="btn btn-ghost" data-action="open-skins">MY SKINS</button></div></div>
+
+    <section class="content-grid wrap">
+      <div class="section-block" id="sets">
+        <div class="section-heading"><div><p class="eyebrow">YOUR LOADOUT</p><h2>Question sets</h2></div><button class="text-button" data-action="new-set">+ CREATE SET</button></div>
+        <div class="set-list" id="set-list"></div>
+      </div>
+      <aside class="side-panel" id="task-mode">
+        <div class="section-heading"><div><p class="eyebrow">LEVEL BREAKS</p><h2>Task mode</h2></div><span class="task-count" id="task-count">0 ACTIVE</span></div>
+        <p class="task-intro">Play Block Breaker with a task checkpoint after every completed level.</p>
+        <div class="task-list" id="task-list"></div>
+        <form class="task-form" id="task-form"><input id="task-input" type="text" maxlength="70" placeholder="Add a task..." aria-label="New task"><button class="btn btn-primary" type="submit">ADD</button></form>
+        <button class="btn btn-ghost task-mode-launch" data-action="play-task-mode">PLAY TASK MODE <span>▶</span></button>
+        <div class="tip-card"><span class="tip-badge">MODE</span><p>Task Mode is separate from study mode. Your progress stays saved on this device.</p></div>
+      </aside>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="set-modal" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="set-modal-title">
+      <button class="modal-close" data-action="close-modal" aria-label="Close">×</button>
+      <p class="eyebrow">NEW LOADOUT</p><h2 id="set-modal-title">Build a question set</h2>
+      <p class="modal-intro">Give your next study run some fuel. Add one question per line in the format <code>Question | Answer</code>.</p>
+      <label>Set name<input id="set-name" type="text" placeholder="e.g. Biology basics" maxlength="32"></label>
+      <label>Questions<textarea id="set-questions" rows="7" placeholder="What is the powerhouse of the cell? | Mitochondria
+What is DNA short for? | Deoxyribonucleic acid"></textarea></label>
+      <p class="form-error" id="form-error" role="alert"></p>
+      <button class="btn btn-primary full-width" data-action="save-set">Save set <span>↗</span></button>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="code-modal" hidden>
+    <section class="modal code-modal" role="dialog" aria-modal="true" aria-labelledby="code-modal-title">
+      <button class="modal-close" data-action="close-code" aria-label="Close code entry">×</button>
+      <p class="eyebrow">SECRET INPUT</p><h2 id="code-modal-title">Enter code</h2>
+      <p class="modal-intro">Enter a valid arcade code to add coins and unlock every ball and paddle skin, including Dedication I–V.</p>
+      <form id="code-form">
+        <label>Code<input id="code-input" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Enter code"></label>
+        <p class="form-error" id="code-error" role="alert"></p>
+        <button class="btn btn-primary full-width" type="submit">Redeem code <span>↗</span></button>
+      </form>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="dedication-modal" hidden>
+    <section class="modal dedication-modal" role="dialog" aria-modal="true" aria-labelledby="dedication-title">
+      <button class="modal-close" data-action="close-dedication" aria-label="Close dedication notice">×</button>
+      <p class="eyebrow">DEDICATION PATH</p><h2 id="dedication-title">Dedication II</h2>
+      <p class="modal-intro" id="dedication-message">Dedication II at level 10</p>
+      <button class="btn btn-primary full-width" data-action="close-dedication">CONTINUE <span>→</span></button>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="shop-modal" hidden>
+    <section class="modal shop-modal" role="dialog" aria-modal="true" aria-labelledby="shop-title">
+      <button class="modal-close" data-action="close-shop" aria-label="Close shop">×</button>
+      <div class="shop-heading"><div><p class="eyebrow">ARCADE GARAGE</p><h2 id="shop-title">Skin shop</h2></div><strong class="shop-balance"><span id="shop-coin-count">0</span> ◆</strong></div>
+      <p class="modal-intro">Buy a skin with coins and equip it for your next run. Purchases save on this device.</p>
+      <div class="shop-list" id="shop-list"></div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="skins-modal" hidden>
+    <section class="modal shop-modal" role="dialog" aria-modal="true" aria-labelledby="skins-title">
+      <button class="modal-close" data-action="close-skins" aria-label="Close skins">×</button>
+      <p class="eyebrow">YOUR COLLECTION</p><h2 id="skins-title">My skins</h2>
+      <p class="modal-intro">Equip ball and paddle skins independently. Your default white skin is always available.</p>
+      <div class="shop-list" id="owned-skins-list"></div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="daily-modal" hidden>
+    <section class="modal daily-modal" role="dialog" aria-modal="true" aria-labelledby="daily-title">
+      <button class="modal-close" data-action="close-daily" aria-label="Close daily challenge">×</button>
+      <p class="eyebrow">OPTIONAL CHAOS RUN</p><h2 id="daily-title">Daily challenge</h2>
+      <p class="modal-intro" id="daily-intro">Choose a question set or Task Mode. Daily runs stack today’s modifiers and award double coins.</p>
+      <div class="daily-options" id="daily-options"></div>
+      <button class="btn btn-ghost full-width" data-action="daily-task-mode">PLAY TASK MODE <span>▶</span></button>
+    </section>
+  </div>
+
+  <div class="game-overlay" id="game-overlay" hidden>
+    <div class="game-shell">
+      <div class="game-header"><div class="game-brand"><span>✦</span> BLOCK BREAKER <small>STUDYCADE ARCADE</small></div><div class="game-head-actions"><span class="game-challenge-label" id="game-challenge">DAILY: CHALLENGE</span><span id="game-set-name">BIOLOGY BASICS</span><button class="icon-button" data-action="exit-game" aria-label="Exit game">×</button></div></div>
+      <div class="game-stats"><span>SCORE <strong id="game-score">000000</strong></span><span>LEVEL <strong id="game-level">01</strong></span><span>LIVES <strong id="game-lives">♥♥♥</strong></span><span>HEART CHARGE <strong id="game-hearts">0/3</strong></span><span>UPGRADE <strong id="game-upgrade">—</strong></span></div>
+      <div class="canvas-wrap"><canvas id="game-canvas" width="760" height="540" aria-label="Block Breaker study game"></canvas><div class="launch-message" id="launch-message">PRESS <strong>↑</strong> OR <strong>SPACE</strong> TO LAUNCH</div></div>
+      <div class="game-footer"><span><kbd>←</kbd><kbd>→</kbd> MOVE</span><span><kbd>↑</kbd> / <kbd>SPACE</kbd> LAUNCH &nbsp;•&nbsp; + UPGRADES</span><span><kbd>ESC</kbd> PAUSE</span></div>
+    </div>
+    <section class="game-over-screen" id="game-over-screen" hidden aria-labelledby="game-over-title">
+      <div class="game-over-card">
+        <p class="eyebrow">RUN COMPLETE</p>
+        <h2 id="game-over-title">GAME OVER</h2>
+        <div class="score-results"><div><span>CURRENT SCORE</span><strong id="final-score">000000</strong></div><div><span>HIGH SCORE</span><strong id="high-score">000000</strong></div></div>
+        <button class="btn btn-primary full-width" data-action="play-again">PLAY AGAIN <span>↻</span></button>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop question-backdrop" id="question-modal" hidden>
+    <section class="modal question-modal" role="dialog" aria-modal="true" aria-labelledby="question-title">
+      <div class="question-top"><span class="question-chip">STUDY CHECK</span><span id="question-progress">QUESTION 01</span></div>
+      <h2 id="question-title">Question goes here</h2>
+      <p class="question-prompt">Type the answer to keep your run alive.</p>
+      <form id="answer-form"><input id="answer-input" autocomplete="off" type="text" placeholder="Your answer..." aria-label="Your answer"><button class="btn btn-primary" type="submit">Submit answer <span>↗</span></button></form>
+      <p class="answer-feedback" id="answer-feedback" role="status"></p>
+    </section>
+  </div>
+
+  <div class="modal-backdrop task-backdrop" id="task-modal" hidden>
+    <section class="modal task-modal" role="dialog" aria-modal="true" aria-labelledby="task-title">
+      <div class="question-top"><span class="question-chip">TASK MODE</span><span id="task-level-label">LEVEL 02 READY</span></div>
+      <h2 id="task-title">Complete one task to continue.</h2>
+      <p class="question-prompt" id="task-prompt">Finish one task before launching the next level.</p>
+      <div class="level-task-card"><span class="level-task-icon">✓</span><strong id="level-task-text">Your next task appears here.</strong></div>
+      <button class="btn btn-primary full-width" id="complete-level-task" data-action="complete-level-task">MARK TASK COMPLETE <span>↗</span></button>
+    </section>
+  </div>
+
+  <div class="task-play-overlay" id="task-play-overlay" hidden>
+    <div class="task-play-shell">
+      <div class="task-play-header"><div><p class="eyebrow">FOCUS SESSION</p><h2>Task mode</h2></div><button class="icon-button" data-action="close-task-mode" aria-label="Close task mode">×</button></div>
+      <p class="task-play-intro">Work through your own checklist without the arcade running in the background.</p>
+      <div class="task-play-list" id="task-play-list"></div>
+      <button class="btn btn-ghost full-width" data-action="close-task-mode">BACK TO DASHBOARD</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="app.js?v=20261108-dedication-skins"></script>
+</body>
+</html>
